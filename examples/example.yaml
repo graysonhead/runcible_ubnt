@@ -1,0 +1,13 @@
+---
+router:
+  meta:
+    device:
+      default_management_protocol: serial
+      driver: ubnt_edgerouter
+      serial:
+        device: /dev/ttyUSB1
+        speed: 115200
+        username: ubnt
+        password: ubnt
+  system:
+    hostname: graysonrouter
