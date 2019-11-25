@@ -1,5 +1,6 @@
 from runcible.protocols.protocol import TerminalProtocolBase
 from runcible.core.errors import RuncibleValidationError, RuncibleNotConnectedError
+from .check_output import check_output_for_errors
 from time import sleep
 import paramiko
 import re
@@ -62,7 +63,9 @@ class UBNTInteractiveSSH(TerminalProtocolBase):
         if not getattr(self, 'terminal', None):
             raise RuncibleNotConnectedError
         self.terminal.send(command + '\n')
-        return self.read_until_prompt()
+        lines = self.read_until_prompt()
+        check_output_for_errors(command, lines)
+        return lines
 
     def read_lines(self, num_bytes=65535):
         raw_output = self.terminal.recv(num_bytes)

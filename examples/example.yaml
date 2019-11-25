@@ -5,9 +5,20 @@ router:
       default_management_protocol: serial
       driver: ubnt_edgerouter
       serial:
-        device: /dev/ttyUSB1
+        device: /dev/ttyUSB0
         speed: 115200
-        username: ubnt
-        password: ubnt
+        username: runcible
+        password: Runcible123
+      ssh:
+        hostname: 10.5.5.1
+        username: runcible
+        password: Runcible123
+        timeout: 15
   system:
     hostname: graysonrouter
+  ethernet_interfaces:
+    - name: eth2
+      ipv4_addresses:
+        - dhcp
+      speed: "100"
+      duplex: half

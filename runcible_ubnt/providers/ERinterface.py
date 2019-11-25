@@ -16,7 +16,8 @@ class UBNTERInterfaceProvider(SubProviderBase):
     supported_attributes = [
         EthernetInterfaceResources.MTU,
         EthernetInterfaceResources.IPV4_ADDRESSES,
-        # EthernetInterfaceResources.DUPLEX
+        EthernetInterfaceResources.DUPLEX,
+        EthernetInterfaceResources.SPEED
     ]
     provides_for = EthernetInterface
 
@@ -55,6 +56,8 @@ class UBNTERInterfaceProvider(SubProviderBase):
         # Duplex and speed
         if 'duplex' in configuration:
             config_dict.update({EthernetInterfaceResources.DUPLEX: configuration.get('duplex')})
+        if 'speed' in configuration:
+            config_dict.update({EthernetInterfaceResources.SPEED: configuration.get('speed')})
         return EthernetInterface(config_dict)
 
     def _add_ip_address(self, interface, address):
@@ -83,7 +86,21 @@ class UBNTERInterfaceProvider(SubProviderBase):
     def _set_mtu(self, interface, mtu):
         return self.device.send_command(f'set interfaces ethernet {interface} mtu {mtu}')
 
+    def _set_duplex(self, interface, duplex):
+        return self.device.send_command(f'set interfaces ethernet {interface} duplex {duplex}')
+
+    def _set_speed(self, interface, speed):
+        return self.device.send_command(f'set interfaces ethernet {interface} speed {speed}')
+
     def fix_need(self, need):
+        if need.attribute == EthernetInterfaceResources.DUPLEX:
+            if need.operation == Op.SET:
+                self._set_duplex(need.module, need.value)
+                self.complete(need)
+        if need.attribute == EthernetInterfaceResources.SPEED:
+            if need.operation == Op.SET:
+                self._set_speed(need.module, need.value)
+                self.complete(need)
         if need.attribute == EthernetInterfaceResources.MTU:
             if need.operation == Op.SET:
                 self._set_mtu(need.module, need.value)

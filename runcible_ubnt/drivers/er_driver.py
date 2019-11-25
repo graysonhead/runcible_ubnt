@@ -1,6 +1,6 @@
 import vyattaconfparser
 from runcible.drivers.driver import DriverBase
-from runcible.protocols import SerialProtocol
+from runcible_ubnt.protocols.ubnt_interactive_serial import UBNTSerialProtocol
 from runcible_ubnt.protocols.ubnt_interactive_ssh import UBNTInteractiveSSH
 from runcible_ubnt.providers.ERSystem import UBNTERSystemProvider
 from runcible_ubnt.providers.ERinterfaces import UBNTEREthernetInterfacesProvider
@@ -31,7 +31,7 @@ class UBNTEdgeRouterDriver(DriverBase):
     }
     # The protocol map maps protocols to identifier strings
     protocol_map = {
-        "serial": SerialProtocol,
+        "serial": UBNTSerialProtocol,
         "ssh": UBNTInteractiveSSH
     }
 
