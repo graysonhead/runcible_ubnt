@@ -1,7 +1,9 @@
 import vyattaconfparser
 from runcible.drivers.driver import DriverBase
 from runcible.protocols import SerialProtocol
+from runcible_ubnt.protocols.ubnt_interactive_ssh import UBNTInteractiveSSH
 from runcible_ubnt.providers.ERSystem import UBNTERSystemProvider
+from runcible_ubnt.providers.ERinterfaces import UBNTEREthernetInterfacesProvider
 
 
 class UBNTEdgeRouterDriver(DriverBase):
@@ -24,11 +26,13 @@ class UBNTEdgeRouterDriver(DriverBase):
 
     # The provider map associates providers to modules
     module_provider_map = {
-        "system": UBNTERSystemProvider
+        "system": UBNTERSystemProvider,
+        "ethernet_interfaces": UBNTEREthernetInterfacesProvider
     }
     # The protocol map maps protocols to identifier strings
     protocol_map = {
-        "serial": SerialProtocol
+        "serial": SerialProtocol,
+        "ssh": UBNTInteractiveSSH
     }
 
     # This method gets run before the device.plan() method is called
@@ -42,7 +46,7 @@ class UBNTEdgeRouterDriver(DriverBase):
         for line in raw_commands:
             if line.endswith('{') and not first_line_index:
                 first_line_index = raw_commands.index(line)
-            if line == ' }':
+            if line.strip() == '}':
                 last_line_index = raw_commands.index(line, last_line_index + 1)
         conf_dict = vyattaconfparser.parse_conf('\n'.join(raw_commands[first_line_index:last_line_index]))
         device.store('configuration', conf_dict)

@@ -30,7 +30,7 @@ class UBNTERSystemProvider(ProviderBase):
 
         config_dict = {}
         # Get the config from the device KV store
-        config = self.device.retrive('configuration')
+        config = self.device.retrieve('configuration')
         system_dict = config.get('system', {})
         for key, value in system_dict.items():
             if key in attribute_map:
