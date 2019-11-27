@@ -4,6 +4,7 @@ from runcible_ubnt.protocols.ubnt_interactive_serial import UBNTSerialProtocol
 from runcible_ubnt.protocols.ubnt_interactive_ssh import UBNTInteractiveSSH
 from runcible_ubnt.providers.ERSystem import UBNTERSystemProvider
 from runcible_ubnt.providers.ERinterfaces import UBNTEREthernetInterfacesProvider
+from runcible_ubnt.providers.ERV4StaticRoutes import UBNTERStaticV4RoutesProvider
 
 
 class UBNTEdgeRouterDriver(DriverBase):
@@ -27,7 +28,8 @@ class UBNTEdgeRouterDriver(DriverBase):
     # The provider map associates providers to modules
     module_provider_map = {
         "system": UBNTERSystemProvider,
-        "ethernet_interfaces": UBNTEREthernetInterfacesProvider
+        "ethernet_interfaces": UBNTEREthernetInterfacesProvider,
+        "static_v4_routes": UBNTERStaticV4RoutesProvider
     }
     # The protocol map maps protocols to identifier strings
     protocol_map = {
